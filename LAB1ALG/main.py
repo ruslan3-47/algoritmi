@@ -1,29 +1,45 @@
 #АТД «очередь» - задача коммивояжера, исчерпывающий поиск в ширину
 class Queue: #создание_очереди
     def __init__(self):
-        self.way = []
-    def add(self,way):
-        self.way.insert(0,way)
+        self.items = []
+    def add(self,item):
+        self.items.append(item)
     def remove(self):
-        return self.way.pop()
+        if not self.empty():
+            return self.items.pop(0)
+        else:
+            raise IndexError("pop from empty queue")
     def size(self):
-        return len(self.way)
+        return len(self.items)
     def empty(self):
-        return len(self.way)==0
-def bfs(graph, beggin):
-    queue = Queue()  # не посещенные вершины
-    queue.add(beggin)
-    visited = set()  # посещенные
-    visited.add(beggin)  # добавляем начальную вершину
-    while queue.empty()!=1:
-        v = queue.remove()
-        print(v,end=' ')
-        for vertex in graph[v]:#осматриваем окрестности вершин
-            if vertex not in visited:
-                visited.add(vertex)
-                queue.add(vertex)
+        return len(self.items)==0
+def bfs(cities, start):#alg
+    best_distance = float('inf')
+    best_route = None
+    queue = Queue()
+    queue.add((start,[start],0))#add tuple
+    while not queue.empty():
+        city, route, distance = queue.remove()
+        if len(route) == len(cities):#if all city done
+            if distance<best_distance:
+                best_distance = distance
+                best_route = route + [start]#back in start
+        else:
+            for neighbor, cost in cities[city].items():#check neighbor
+                if neighbor not in route:
+                    route = route +[neighbor]
+                    distance = distance + cost
+                    queue.add((neighbor,route,distance))
+    return best_route,  best_distance
 
-graph = {0:[1, 3],1:[0, 2],2:[0,1,4],3:[0],4:[2]} #вершины и связи
-bfs(graph,0)
+graph = {
+    0:{1: 10, 2: 15},
+    1:{0: 10, 2: 5,3: 20},
+    2:{0: 15, 1: 5,3: 12},
+    3:{1: 20, 3: 12}
+} #вершины и связи
+short, distance = bfs(graph,0)
+print(f'shortest route : {short}')
+print(f'best distance is : {distance}')
 
 
