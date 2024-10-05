@@ -1,5 +1,22 @@
 #АТД «очередь» - задача коммивояжера, исчерпывающий поиск в ширину
-class Queue: #создание_очереди
+from abc import ABC, abstractmethod
+class AbstractQueue(ABC):
+    @abstractmethod
+    def __int__(self):
+        pass
+    @abstractmethod
+    def __add__(self, other):
+        pass
+    @abstractmethod
+    def remove(self):
+        pass
+    @abstractmethod
+    def size(self):
+        pass
+    @abstractmethod
+    def empty(self):
+        pass
+class Queue(AbstractQueue): #создание_очереди
     def __init__(self):
         self.items = []
     def add(self,item):
