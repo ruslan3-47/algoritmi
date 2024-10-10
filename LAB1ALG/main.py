@@ -39,7 +39,7 @@ class Queue(AbstractQueue): #создание_очереди наследова�
     def __init__(self):#конструктор
         self.items = []
     def __del__(self):#деструктор
-        pass
+        self.items.clear()
     def add(self,item):#добавление элемента
         self.items.append(item)
     def remove(self):#удаление левого элемента
